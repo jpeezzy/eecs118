@@ -1,5 +1,5 @@
-Appriximation for graphs:
-***What is Approximation for node Connection?***
+Appriximation for graphs:  
+***What is Approximation for node Connection?***  
 
 ***FUNCTIONS***  
 node_connectivity(G, s=None, t=None)[source]:  
