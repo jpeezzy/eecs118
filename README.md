@@ -55,8 +55,6 @@ httpghted_vertex_cover(G[, weight])
 Returns an approximate minimum weighted vertex cover  
 After getting the minimum vertex cover, will display it inside the GUI screen  
 
-://networkx.github.io/documentation/stable/reference/algorithms/approximation.html#  
-
 **GOALS**  
 Implementing graphs in python -- IN PROGRESS  
 Implementing GUI -- NOT COMPLETED   
