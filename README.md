@@ -26,5 +26,10 @@ Pairwise or local node connectivity between two distinct and nonadjacent nodes i
 
 This algorithm is a fast approximation that gives an strict lower bound on the actual number of node independent paths between two nodes [1]. It works for both directed and undirected graphs."
 
+**GOALS**
+Implementing graphs in python -- IN PROGRESS
+Implementing GUI -- NOT COMPLETED 
+Documentation -- NOT COMPLETED
+
 https://networkx.github.io/documentation/stable/reference/algorithms/approximation.html#
 
