@@ -1,7 +1,7 @@
 Appriximation for graphs:
 ***What is Approximation for node Connection?***
 
-***FUNCTIONS***
+***FUNCTIONS***  
 node_connectivity(G, s=None, t=None)[source]:  
 
 "Node connectivity is equal to the minimum number of nodes that must be removed to disconnect G or render it trivial. By Menger’s theorem, this is equal to the number of node independent paths (paths that share no nodes other than source and target)."  
