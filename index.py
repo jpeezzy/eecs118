@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import csv
 import pylab
 from tkinter.filedialog import askopenfilename
-from tkinter import messagebox
+from tkinter import messagebox, StringVar
 
 from networkx.algorithms import approximation as approx
 #build a window using tkInter
@@ -450,7 +450,7 @@ def max_clique_hit():
         pylab.show()
         return
     #create window for dfs_edges
-    a = messagebox.askyesno(title='are you sure', message='max clique, continue?')
+    a = messagebox.askyesno(title='are you sure', message='max clique removal, continue?')
     if (a == True):
         window3 = tk.Toplevel(window)
         window3.geometry('400x300')
@@ -508,7 +508,7 @@ def clique_remove_hit():
         pylab.show()
         return
     #create window for dfs_edges
-    a = messagebox.askyesno(title='are you sure', message='max clique, continue?')
+    a = messagebox.askyesno(title='are you sure', message='max clique removal, continue?')
     if (a == True):
         window3 = tk.Toplevel(window)
         window3.geometry('400x300')
@@ -547,87 +547,309 @@ def clique_hit():
 
 #Clique end
 #################3
+def average_clustering(trials, prevwindow):
+    trials = int(trials.get())
+    print("num trials inserted is ")
+    print(trials)
+    prevwindow.destroy()
+    def show_result():
+        m = path.get()
+        #input user graph
+        with open(m) as csvfile: #read the csv file, row by row
+            reader = csv.reader(csvfile)
+            next(reader)
+            source = []
+            target = []
+            value = []
+            for row in reader:
+                source.append(int(row[0]))
+                target.append(int(row[1]))
+                value.append(int(row[2]))
+        #create one empty graph
+        G = nx.Graph()
+        #add nodes to the graph
+        for i in range(0, np.size(target) + 1):
+            G.add_node(i)
+        #add weighted edges to the graph
+        for i in range(np.size(source)):
+            G.add_weighted_edges_from([(source[i], target[i], value[i])])
+        #assign layout with spacing
+        pos = nx.spring_layout(G)
+        #graph is loaded completely
+        result = approx.average_clustering(G, trials)
+        print("conversion complete")
+        messagebox.showinfo(title='Result', message=('the average clustering coefficient is ', result)) #solves the node connectivity problem
+        #draw the graph
+        return
+    #create window for dfs_edges
+    a = messagebox.askyesno(title='are you sure', message='average clustering continue?')
+    if (a == True):
+        window3 = tk.Toplevel(window)
+        window3.geometry('400x300')
+        window3.title('clique')
+        tk.Label(window3, text='input the necessary components: ', bg='yellow').place(x=10, y=10)
 
+    #use path function to get path
+    def select_path():
+        path_ = askopenfilename() #path function
+        path.set(path_)
+
+    #pass the value of path
+    path = tk.StringVar()
+    path.set('path')
+    tk.Label(window3, text='input the path to import your own graph : ', bg = 'green').place(x=10, y=10)
+    entry_path = tk.Entry(window3, textvariable = path, width = 35)
+    entry_path.place(x=10, y=35)
+    tk.Button(window3, text = 'choose path', command = select_path).place(x = 250, y = 35)
+    #confirm, and generate the output
+    confirm = tk.Button(window3, text = 'confirm', command = show_result, bg = 'yellow').place(x = 150, y = 130)
+    return
+#Clustering start
 def clustering_hit():
-    a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen clique problem, continue?')
+    a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen the average clustering '
+                                                                'problem, continue?')
     if(a == True):
         #create a menu for traversal problems
         window1 = tk.Toplevel(window)
         window1.geometry('400x200')
-        window1.title('traversal problems')
-        tk.Label(window1, text='choose the sort of traversal problem you want to deal with: ', bg = 'yellow').place(x=10, y=10)
-        dfs = tk.Button(window1, text = 'Depth_first_search', command = hit_traversal_dfs, width = 25, anchor = 'w')
-        dfs.place(x = 10, y = 50)
-        bfs = tk.Button(window1, text = 'Breadth_first_search', width = 25, anchor = 'w')
-        bfs.place(x = 10, y = 80)
-        bs = tk.Button(window1, text = 'Beam_search', width = 25, anchor = 'w')
-        bs.place(x = 10, y = 110)
-    return
+        window1.title('clustering problems')
+        question = 'How many trials would you like to \n calculate average clustering?'
+        tk.Label(window1, text=question, bg = 'yellow').place(x=10, y=10)
+        trial= StringVar(None)
+        e = tk.Entry(window1, textvariable = trial, width=50);
+        e.pack(side="left")
+        submit = tk.Button(window1, text = 'submit', command = lambda: average_clustering(trial, window1), width = 25, anchor = 'w')
+        submit.place(x = 10, y = 150)
 
+
+    return
+#clustering end
+########################
+#start dominating set
 def dominating_set_hit():
-    a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen dominating set problem, continue?')
-    if(a == True):
-        #create a menu for traversal problems
-        window1 = tk.Toplevel(window)
-        window1.geometry('400x200')
-        window1.title('traversal problems')
-        tk.Label(window1, text='choose the sort of traversal problem you want to deal with: ', bg = 'yellow').place(x=10, y=10)
-        dfs = tk.Button(window1, text = 'Depth_first_search', command = hit_traversal_dfs, width = 25, anchor = 'w')
-        dfs.place(x = 10, y = 50)
-        bfs = tk.Button(window1, text = 'Breadth_first_search', width = 25, anchor = 'w')
-        bfs.place(x = 10, y = 80)
-        bs = tk.Button(window1, text = 'Beam_search', width = 25, anchor = 'w')
-        bs.place(x = 10, y = 110)
-    return
+    def show_result():
+        m = path.get()
+        #input user graph
+        with open(m) as csvfile: #read the csv file, row by row
+            reader = csv.reader(csvfile)
+            next(reader)
+            source = []
+            target = []
+            value = []
+            for row in reader:
+                source.append(int(row[0]))
+                target.append(int(row[1]))
+                value.append(int(row[2]))
+        #create one empty graph
+        G = nx.Graph()
+        #add nodes to the graph
+        for i in range(0, np.size(target) + 1):
+            G.add_node(i)
+        #add weighted edges to the graph
+        for i in range(np.size(source)):
+            G.add_weighted_edges_from([(source[i], target[i], value[i])])
+        #assign layout with spacing
+        pos = nx.spring_layout(G)
+        #graph is loaded completely
+        result = approx.min_weighted_dominating_set(G)
+        print("conversion complete")
+        messagebox.showinfo(title='Result', message=('the minimum weighted dominating set is', result)) #solves the node connectivity problem
+        #draw the graph
+        return
 
+    a = messagebox.askyesno(title='are you sure', message='dominating set, continue?')
+    if (a == True):
+        window3 = tk.Toplevel(window)
+        window3.geometry('400x300')
+        window3.title('dominating set')
+        tk.Label(window3, text='input the necessary components: ', bg='yellow').place(x=10, y=10)
+
+    #use path function to get path
+    def select_path():
+        path_ = askopenfilename() #path function
+        path.set(path_)
+
+    #pass the value of path
+    path = tk.StringVar()
+    path.set('path')
+    tk.Label(window3, text='input the path to import your own graph : ', bg = 'green').place(x=10, y=10)
+    entry_path = tk.Entry(window3, textvariable = path, width = 35)
+    entry_path.place(x=10, y=35)
+    tk.Button(window3, text = 'choose path', command = select_path).place(x = 250, y = 35)
+    #confirm, and generate the output
+    confirm = tk.Button(window3, text = 'confirm', command = show_result, bg = 'yellow').place(x = 150, y = 130)
+    return
+#end dominating set
+################
+#start independent_set
 def independent_set_hit():
+    def show_result():
+        m = path.get()
+        #input user graph
+        with open(m) as csvfile: #read the csv file, row by row
+            reader = csv.reader(csvfile)
+            next(reader)
+            source = []
+            target = []
+            value = []
+            for row in reader:
+                source.append(int(row[0]))
+                target.append(int(row[1]))
+                value.append(int(row[2]))
+        #create one empty graph
+        G = nx.Graph()
+        #add nodes to the graph
+        for i in range(0, np.size(target) + 1):
+            G.add_node(i)
+        #add weighted edges to the graph
+        for i in range(np.size(source)):
+            G.add_weighted_edges_from([(source[i], target[i], value[i])])
+        #assign layout with spacing
+        pos = nx.spring_layout(G)
+        #graph is loaded completely
+        result = approx.maximum_independent_set(G)
+        print("conversion complete")
+        messagebox.showinfo(title='Result', message=('the maximum independent set is', result)) #solves the node connectivity problem
+        #draw the graph
+        return
+
     a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen independent set problem, continue?')
-    if(a == True):
-        #create a menu for traversal problems
-        window1 = tk.Toplevel(window)
-        window1.geometry('400x200')
-        window1.title('traversal problems')
-        tk.Label(window1, text='choose the sort of traversal problem you want to deal with: ', bg = 'yellow').place(x=10, y=10)
-        dfs = tk.Button(window1, text = 'Depth_first_search', command = hit_traversal_dfs, width = 25, anchor = 'w')
-        dfs.place(x = 10, y = 50)
-        bfs = tk.Button(window1, text = 'Breadth_first_search', width = 25, anchor = 'w')
-        bfs.place(x = 10, y = 80)
-        bs = tk.Button(window1, text = 'Beam_search', width = 25, anchor = 'w')
-        bs.place(x = 10, y = 110)
-    return
+    if (a == True):
+        window3 = tk.Toplevel(window)
+        window3.geometry('400x300')
+        window3.title('independent set')
+        tk.Label(window3, text='input the necessary components: ', bg='yellow').place(x=10, y=10)
 
+    #use path function to get path
+    def select_path():
+        path_ = askopenfilename() #path function
+        path.set(path_)
+
+    #pass the value of path
+    path = tk.StringVar()
+    path.set('path')
+    tk.Label(window3, text='input the path to import your own graph : ', bg = 'green').place(x=10, y=10)
+    entry_path = tk.Entry(window3, textvariable = path, width = 35)
+    entry_path.place(x=10, y=35)
+    tk.Button(window3, text = 'choose path', command = select_path).place(x = 250, y = 35)
+    #confirm, and generate the output
+    confirm = tk.Button(window3, text = 'confirm', command = show_result, bg = 'yellow').place(x = 150, y = 130)
+    return
+#end independent set
+##########################
+#start matching 
 def matching_hit():
+    def show_result():
+        m = path.get()
+        #input user graph
+        with open(m) as csvfile: #read the csv file, row by row
+            reader = csv.reader(csvfile)
+            next(reader)
+            source = []
+            target = []
+            value = []
+            for row in reader:
+                source.append(int(row[0]))
+                target.append(int(row[1]))
+                value.append(int(row[2]))
+        #create one empty graph
+        G = nx.Graph()
+        #add nodes to the graph
+        for i in range(0, np.size(target) + 1):
+            G.add_node(i)
+        #add weighted edges to the graph
+        for i in range(np.size(source)):
+            G.add_weighted_edges_from([(source[i], target[i], value[i])])
+        #assign layout with spacing
+        pos = nx.spring_layout(G)
+        #graph is loaded completely
+        result = approx.min_maximal_matching(G)
+        print("conversion complete")
+        messagebox.showinfo(title='Result', message=('the min maximal matching edges are', result))
+        #draw the graph
+        return
+
     a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen matching problem, continue?')
-    if(a == True):
-        #create a menu for traversal problems
-        window1 = tk.Toplevel(window)
-        window1.geometry('400x200')
-        window1.title('traversal problems')
-        tk.Label(window1, text='choose the sort of traversal problem you want to deal with: ', bg = 'yellow').place(x=10, y=10)
-        dfs = tk.Button(window1, text = 'Depth_first_search', command = hit_traversal_dfs, width = 25, anchor = 'w')
-        dfs.place(x = 10, y = 50)
-        bfs = tk.Button(window1, text = 'Breadth_first_search', width = 25, anchor = 'w')
-        bfs.place(x = 10, y = 80)
-        bs = tk.Button(window1, text = 'Beam_search', width = 25, anchor = 'w')
-        bs.place(x = 10, y = 110)
-    return
+    if (a == True):
+        window3 = tk.Toplevel(window)
+        window3.geometry('400x300')
+        window3.title('matching')
+        tk.Label(window3, text='input the necessary components: ', bg='yellow').place(x=10, y=10)
 
+    #use path function to get path
+    def select_path():
+        path_ = askopenfilename() #path function
+        path.set(path_)
+
+    #pass the value of path
+    path = tk.StringVar()
+    path.set('path')
+    tk.Label(window3, text='input the path to import your own graph : ', bg = 'green').place(x=10, y=10)
+    entry_path = tk.Entry(window3, textvariable = path, width = 35)
+    entry_path.place(x=10, y=35)
+    tk.Button(window3, text = 'choose path', command = select_path).place(x = 250, y = 35)
+    #confirm, and generate the output
+    confirm = tk.Button(window3, text = 'confirm', command = show_result, bg = 'yellow').place(x = 150, y = 130)
+    return
+#end matching
+##################
+#start ramsey
 def ramsey_hit():
-    a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen ramsey problem, continue?')
-    if(a == True):
-        #create a menu for traversal problems
-        window1 = tk.Toplevel(window)
-        window1.geometry('400x200')
-        window1.title('traversal problems')
-        tk.Label(window1, text='choose the sort of traversal problem you want to deal with: ', bg = 'yellow').place(x=10, y=10)
-        dfs = tk.Button(window1, text = 'Depth_first_search', command = hit_traversal_dfs, width = 25, anchor = 'w')
-        dfs.place(x = 10, y = 50)
-        bfs = tk.Button(window1, text = 'Breadth_first_search', width = 25, anchor = 'w')
-        bfs.place(x = 10, y = 80)
-        bs = tk.Button(window1, text = 'Beam_search', width = 25, anchor = 'w')
-        bs.place(x = 10, y = 110)
-    return
+    def show_result():
+        m = path.get()
+        #input user graph
+        with open(m) as csvfile: #read the csv file, row by row
+            reader = csv.reader(csvfile)
+            next(reader)
+            source = []
+            target = []
+            value = []
+            for row in reader:
+                source.append(int(row[0]))
+                target.append(int(row[1]))
+                value.append(int(row[2]))
+        #create one empty graph
+        G = nx.Graph()
+        #add nodes to the graph
+        for i in range(0, np.size(target) + 1):
+            G.add_node(i)
+        #add weighted edges to the graph
+        for i in range(np.size(source)):
+            G.add_weighted_edges_from([(source[i], target[i], value[i])])
+        #assign layout with spacing
+        pos = nx.spring_layout(G)
+        #graph is loaded completely
+        result = approx.ramsey_R2(G)
+        print("conversion complete")
+        messagebox.showinfo(title='Result', message=('the Ramsey number', result))
+        #draw the graph
+        return
 
+    a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen ramsey problem, continue?')
+    if (a == True):
+        window3 = tk.Toplevel(window)
+        window3.geometry('400x300')
+        window3.title('ramsey')
+        tk.Label(window3, text='input the necessary components: ', bg='yellow').place(x=10, y=10)
+
+    #use path function to get path
+    def select_path():
+        path_ = askopenfilename() #path function
+        path.set(path_)
+
+    #pass the value of path
+    path = tk.StringVar()
+    path.set('path')
+    tk.Label(window3, text='input the path to import your own graph : ', bg = 'green').place(x=10, y=10)
+    entry_path = tk.Entry(window3, textvariable = path, width = 35)
+    entry_path.place(x=10, y=35)
+    tk.Button(window3, text = 'choose path', command = select_path).place(x = 250, y = 35)
+    #confirm, and generate the output
+    confirm = tk.Button(window3, text = 'confirm', command = show_result, bg = 'yellow').place(x = 150, y = 130)
+    return
+#end ramsey
+####################
+#start vertex_cover
 def vertex_cover_hit():
     a = messagebox.askyesno(title = 'are you sure', message = 'you have chosen vertex cover problem, continue?')
     if(a == True):
@@ -643,7 +865,7 @@ def vertex_cover_hit():
         bs = tk.Button(window1, text = 'Beam_search', width = 25, anchor = 'w')
         bs.place(x = 10, y = 110)
     return
-
+#end vertex cover
 #end approximation methods
 
 def hit_approximation():
