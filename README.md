@@ -3,6 +3,12 @@ Appriximation for graphs:
 
 <button class="button-save large">About Me</button>
 
+<H1>SQL DEMO</H1>
+<iframe width="806" height="453" src="https://www.youtube.com/embed/L_Kaj_OD9pc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<H1>GRAPH APPROXIMATION DEMO</H1>
+<iframe width="804" height="603" src="https://www.youtube.com/embed/iCGejfVEpZM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ***FUNCTIONS***  
 node_connectivity(G, s=None, t=None)[source]:  
 
