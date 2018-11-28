@@ -3,8 +3,6 @@ Appriximation for graphs:
 
 <button class="button-save large">About Me</button>
 
-<H1>SQL DEMO</H1>
-<iframe width="806" height="453" src="https://www.youtube.com/embed/L_Kaj_OD9pc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <H1>GRAPH APPROXIMATION DEMO</H1>
 <iframe width="804" height="603" src="https://www.youtube.com/embed/iCGejfVEpZM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -64,8 +62,11 @@ Returns an approximate minimum weighted vertex cover
 After getting the minimum vertex cover, will display it inside the GUI screen  
 
 **GOALS**  
-Implementing graphs in python -- IN PROGRESS  
-Implementing GUI -- NOT COMPLETED   
-Documentation -- NOT COMPLETED  
+Implementing graphs in python -- COMPLETED  
+Implementing GUI -- COMPLETED
 
+**OLD VIDEOS** 
+
+<H1>SQL DEMO</H1>
+<iframe width="806" height="453" src="https://www.youtube.com/embed/L_Kaj_OD9pc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
